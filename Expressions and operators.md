@@ -200,24 +200,109 @@ IE9开始(ES5)
 
 
 
+#### ------------ 7.函数 switch 循环 ---------------
+
+用function语句定义的函数对象，我们叫他函数声明:
+
+		fd();                   // true
+		function fd(){
+		//do sth
+		return true;
+	}
+
+函数表达式:
+
+		fe();                   // TypeError
+		var fe = function(){
+			//do sth
+		}
+
+函数声明会被预先处理，或者函数前置。
+函数表达式就不能再声明前调用 会TypeError
 
 
+**for in 语句 **
+
+		var p ;					// 1.顺序不确定
+		var obj = {x:1 , y:2}		        // 2.enumerable为false时不会出现
+		for( p in obj ){			// 3.for in 对象属性受原型链影响
+		}
 
 
+#### ------------ 8.严格模式 ---------------
+
+严格模式是一种特殊的执行模式，它修复了部分语言上的不足，提供更强的错误检查，并增强安全性
+
+```
+function func(){
+	'use strict';
+}
+```
+
+*不允许用with 会有个SyntaxError 语法错误
+
+*不允许未声明的变量被赋值 , 会有个ReferenceError
+ 这在一般模式下为声明变量是全局变量
+
+*arguments变为参数的静态副本
 
 
+**一般模式**
+```
+!function(a){
+	arguments[0] = 100;
+	console.log(a);    //100
+}(1); 
+
+```
+要注意的是如果不把1传进去那console.log(a) 打印出的undefined
+一般模式下形参与arguments还是有绑定关系的，严格则没有
+
+**严格模式**
+
+```
+!function(a){
+	'use strict';
+	arguments[0] = 100;
+	console.log(a);    //1
+}(1);
 
 
+```
+严格模式下 不论参数传还是不传，对arguments都不会有影响
+
+但如果参数传的是一个对象的话
+```
+!function(a){
+	'use strict';
+	arguments[0].x = 100;
+	console.log(a.x);     //100
+}({x:1});
+
+```
+
+delete参数，函数名报错
+
+```
+不允许用with
+所有变量必须声明，赋值给未声明的变量会报错，而不是隐士创建全局变量
+eval中的代码不能创建eval所在作用域下的变量、函数。而是为eval单独创建一个作用域，并在eval返回时丢弃
+函数中的特殊对象arguments是静态副本，而不像非严格（一般）模式下那样，修改arguments或修改参数变量会相互影响
+删除configurable = false的属性时报错，而不是忽略
+禁止八进制字面量，比如010（八进制的8）
+eval , arguments变为关键字，不可作为变量名、函数名等
+一般函数调用时（不是对象的方法调用，也不实用apply/call/bind等修改this)this指向null,而不是全局对象
+若使用apply/call ,当传入null或undefined时，this将指向null或undefined，而不是全局对象
+试图修改不可写属性（writable = false),在不可拓展的对象上添加属性时报TypeError,而不是忽略
+arguments.caller  arguments.callee被禁用
+
+严格模式是一种特殊的运行模式，修复了部分语言上的不足，比如禁用with
+提供更强的错误检查，比如重复再字面量中写重复的属性名，或者尝试delete一些不可配置的属性，或者给没声明的变量赋值而创建了全局变量
+安全性上 禁用 arguments.caller  arguments.callee
+严格模式是向上兼容的。
 
 
-
-
-
-
-
-
-
-
+```
 
 
 
